@@ -1,20 +1,9 @@
 # frozen_string_literal: true
 
-module Imagen
-  # Builder is responsible for wrapping all operations to create a result
-  class Builder
-    def self.build(repo_url)
-      new(repo_url).build
-    end
+$LOAD_PATH << 'lib'
 
-    attr_reader :repo_url
+require 'imagen/builder'
+require 'imagen/clone'
 
-    def initialize(repo_url)
-      @repo_url = repo_url
-    end
-
-    def build
-      repo_url
-    end
-  end
-end
+# Base module
+module Imagen; end
