@@ -3,14 +3,12 @@
 $LOAD_PATH << 'lib'
 
 require 'rubocop/rake_task'
-require 'rake/testtask'
+require 'rspec/core/rake_task'
 
 desc 'Run RuboCop'
 RuboCop::RakeTask.new(:rubocop)
 
 desc 'Run Tests'
-Rake::TestTask.new(:test) do |t|
-  t.test_files = FileList['test/**/*_test.rb']
-end
+RSpec::Core::RakeTask.new(:spec)
 
-task default: %i[rubocop test]
+task default: %i[rubocop spec]

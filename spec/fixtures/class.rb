@@ -1,0 +1,16 @@
+class BaconClass
+  def self.bar
+    puts 'BaconClass.bar'
+  end
+
+  def foo
+    puts 'BaconClass#foo'
+  end
+
+  class BaconChildClass
+    def foo_child
+      puts 'BaconClass::BaconChildClass#foo'
+    end
+  end
+  private_constant :BaconChildClass
+end
