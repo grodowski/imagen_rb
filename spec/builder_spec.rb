@@ -3,6 +3,27 @@
 require 'rspec'
 require 'imagen'
 
+module Imagen
+  module Node
+    # Reopen Imagen::Node::Base to add convenience spec finders
+    class Base
+      def find_all(matcher, ret = [])
+        ret.tap do
+          ret << self if matcher.call(self)
+          children.each { |child| child.find_all(matcher, ret) }
+        end
+      end
+    end
+  end
+end
+
+# Matcher compatible with Imagen::Node::Base#find_all
+# This method reeks of :reek:UtilityFunciton
+def of_type(type)
+  ->(node) { node.is_a?(type) }
+end
+
+# rubocop:disable Metrics/BlockLength
 describe Imagen::Builder do
   let(:repo_url) { 'https://github.com/not-existent/bacon' }
   let(:expect_clone) { expect(Imagen::Clone).to receive(:perform) }
@@ -28,8 +49,22 @@ describe Imagen::Builder do
       allow(FileUtils).to receive(:remove_entry) # do not remove spec/fixtures
     end
 
-    it 'builds a tree' do
-      expect(subject.build).to be_a(Imagen::Node::Root)
+    it 'builds a tree with correct node types (integrated)' do
+      root = subject.build
+      expect(root).to be_a(Imagen::Node::Root)
+
+      classes = root.find_all(of_type(Imagen::Node::Class))
+      expect(classes.map(&:name)).to include('BaconClass', 'BaconChildClass')
+
+      modules = root.find_all(of_type(Imagen::Node::Module))
+      expect(modules.map(&:name)).to include('BaconModule')
+
+      imethods = root.find_all(of_type(Imagen::Node::IMethod))
+      expect(imethods.map(&:name))
+        .to include('foo', 'foo_child', 'lonely_method', 'bar')
+
+      cmethods = root.find_all(of_type(Imagen::Node::CMethod))
+      expect(cmethods.map(&:name)).to include('foo', 'bar')
     end
   end # end context 'given a clone dir'
 end

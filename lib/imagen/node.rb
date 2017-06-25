@@ -36,29 +36,29 @@ module Imagen
 
     # Represents a Ruby module
     class Module < Base
-      def build_from_ast(_ast)
-        tap { @name = 'its a module' }
+      def build_from_ast(ast_node)
+        tap { @name = ast_node.children[0].children[1].to_s }
       end
     end
 
     # Represents a Ruby class
     class Class < Base
-      def build_from_ast(_ast)
-        tap { @name = 'its a class' }
+      def build_from_ast(ast_node)
+        tap { @name = ast_node.children[0].children[1].to_s }
       end
     end
 
     # Represents a Ruby class method
     class CMethod < Base
-      def build_from_ast(_ast)
-        tap { @name = 'its a method' }
+      def build_from_ast(ast_node)
+        tap { @name = ast_node.children[1].to_s }
       end
     end
 
-    # Represents a Ruby class method
+    # Represents a Ruby instance method
     class IMethod < Base
-      def build_from_ast(_ast)
-        tap { @name = 'its a method' }
+      def build_from_ast(ast_node)
+        tap { @name = ast_node.children[0].to_s }
       end
     end
   end
