@@ -34,14 +34,6 @@ module Imagen
       end
     end
 
-    class Dir
-
-    end
-
-    class File
-
-    end
-
     # Represents a Ruby module
     class Module < Base
       def build_from_ast(ast_node)
