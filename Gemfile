@@ -2,6 +2,7 @@
 
 source 'https://rubygems.org'
 
+gem 'parser'
 gem 'rake'
 
 group :test, :development do
