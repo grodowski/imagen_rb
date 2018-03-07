@@ -1,2 +1,4 @@
 .bundle
 .env
+.ruby-version
+.ruby-gemset

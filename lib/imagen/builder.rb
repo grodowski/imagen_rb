@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'parser/current'
+require 'tmpdir'
 
 module Imagen
   # Builder is responsible for wrapping all operations to create a result
