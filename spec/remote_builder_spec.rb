@@ -45,5 +45,6 @@ describe Imagen do
       cmethods = root.find_all(of_type(Imagen::Node::CMethod))
       expect(cmethods.map(&:name)).to include('foo', 'bar')
     end
-  end # end context 'given a clone dir'
+  end
 end
+# rubocop:enable Metrics/BlockLength
