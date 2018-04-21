@@ -36,9 +36,11 @@ module Imagen
       def build_from_dir(dir)
         @dir = dir
         list_files.each do |path|
-          Imagen::Visitor.traverse(Parser::CurrentRuby.parse_file(path), self)
-        rescue Parser::SyntaxError => err
-          warn "#{path}: #{err} #{err.message}"
+          begin
+            Imagen::Visitor.traverse(Parser::CurrentRuby.parse_file(path), self)
+          rescue Parser::SyntaxError => err
+            warn "#{path}: #{err} #{err.message}"
+          end
         end
         self
       end
