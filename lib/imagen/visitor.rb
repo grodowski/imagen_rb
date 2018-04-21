@@ -10,7 +10,7 @@ module Imagen
       def: Imagen::Node::IMethod
     }.freeze
 
-    attr_reader :root, :current_root
+    attr_reader :root, :current_root, :file_path
 
     def self.traverse(ast, root)
       new.traverse(ast, root)

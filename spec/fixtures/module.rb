@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BaconModule
   def self.foo
     puts 'Bacon.foo'

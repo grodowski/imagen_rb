@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BaconClass
   def self.bar
     puts 'BaconClass.bar'

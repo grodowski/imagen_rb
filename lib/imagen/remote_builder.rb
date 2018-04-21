@@ -4,8 +4,9 @@ require 'parser/current'
 require 'tmpdir'
 
 module Imagen
-  # Builder is responsible for wrapping all operations to create a result
-  class Builder
+  # RemoteBuilder is responsible for wrapping all operations to create code
+  # structure for a remote git repository.
+  class RemoteBuilder
     attr_reader :repo_url, :dir
 
     def initialize(repo_url)

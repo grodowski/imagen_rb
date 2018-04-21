@@ -1,34 +1,13 @@
 # frozen_string_literal: true
 
-require 'rspec'
-require 'imagen'
-
-module Imagen
-  module Node
-    # Reopen Imagen::Node::Base to add convenience spec finders
-    class Base
-      def find_all(matcher, ret = [])
-        ret.tap do
-          ret << self if matcher.call(self)
-          children.each { |child| child.find_all(matcher, ret) }
-        end
-      end
-    end
-  end
-end
-
-# Matcher compatible with Imagen::Node::Base#find_all
-# This method reeks of :reek:UtilityFunciton
-def of_type(type)
-  ->(node) { node.is_a?(type) }
-end
+require 'spec_helper'
 
 # rubocop:disable Metrics/BlockLength
-describe Imagen::Builder do
+describe Imagen do
   let(:repo_url) { 'https://github.com/not-existent/bacon' }
   let(:expect_clone) { expect(Imagen::Clone).to receive(:perform) }
 
-  subject { Imagen::Builder.new(repo_url) }
+  subject { Imagen::RemoteBuilder.new(repo_url) }
 
   it 'calls Clone with repo_url and tempdir' do
     expect_clone.with(repo_url, subject.dir)
