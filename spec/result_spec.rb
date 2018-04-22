@@ -4,7 +4,7 @@ require 'spec_helper'
 require 'undercover'
 require 'pry'
 
-describe Undercover::Report::Result do
+describe Undercover::Result do
   let(:ast) { Imagen.from_local('spec/fixtures/class.rb') }
   let(:lcov) do
     Undercover::LcovParser.parse('spec/fixtures/fixtures.lcov')

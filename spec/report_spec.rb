@@ -11,7 +11,7 @@ describe Undercover::Report do
     report.build
 
     expect(report.results.size).to eq(2)
-    expect(report.all_results.first).to be_an(Undercover::Report::Result)
+    expect(report.all_results.first).to be_an(Undercover::Result)
     expect(report.all_results.first.coverage_f).to eq(0.8333)
   end
 end
