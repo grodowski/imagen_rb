@@ -1,4 +1,5 @@
 .bundle
+coverage
 .env
 .ruby-version
 .ruby-gemset

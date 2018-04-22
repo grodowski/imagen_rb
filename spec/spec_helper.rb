@@ -1,24 +1,21 @@
 # frozen_string_literal: true
 
+require 'simplecov'
+require 'simplecov-lcov'
+SimpleCov::Formatter::LcovFormatter.config.report_with_single_file = true
+SimpleCov.formatter = SimpleCov::Formatter::LcovFormatter
+SimpleCov.start do
+  add_filter(/^\/spec\//)
+end
+
 require 'rspec'
 require 'imagen'
 
-# Reopen Imagen::Node::Base to add convenience spec finders
-module Imagen
-  module Node
-    class Base
-      def find_all(matcher, ret = [])
-        ret.tap do
-          ret << self if matcher.call(self)
-          children.each { |child| child.find_all(matcher, ret) }
-        end
-      end
-    end
-  end
-end
-
-# Matcher compatible with Imagen::Node::Base#find_all
-# This method reeks of :reek:UtilityFunciton
+# Matchers compatible with Imagen::Node::Base#find_all
 def of_type(type)
   ->(node) { node.is_a?(type) }
+end
+
+def with_name(name)
+  ->(node) { node.name == name }
 end

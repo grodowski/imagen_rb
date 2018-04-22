@@ -15,7 +15,7 @@ module Imagen
     attr_reader :repo_url, :dir
 
     def initialize(repo_url, dirname)
-      unless repo_url.match?(%r{^https:\/\/}i)
+      unless repo_url.match?(/^https:\/\/}/)
         raise ArgumentError, 'repo_url must start with https://'
       end
       @repo_url = repo_url

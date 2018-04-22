@@ -27,6 +27,13 @@ module Imagen
       def last_line
         ast_node.location.last_line
       end
+
+      def find_all(matcher, ret = [])
+        ret.tap do
+          ret << self if matcher.call(self)
+          children.each { |child| child.find_all(matcher, ret) }
+        end
+      end
     end
 
     # Root node for a given directory
@@ -45,9 +52,22 @@ module Imagen
         self
       end
 
+      def file_path
+        dir
+      end
+
+      def first_line
+        nil
+      end
+
+      def last_line
+        nil
+      end
+
       private
 
       def list_files
+        return [dir] if File.file?(dir)
         Dir.glob("#{dir}/**/*.rb").reject { |path| path =~ Imagen::EXCLUDE_RE }
       end
     end
