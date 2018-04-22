@@ -28,6 +28,21 @@ module Imagen
         ast_node.location.last_line
       end
 
+      def source
+        source_lines.join("\n")
+      end
+
+      def source_lines_with_numbers
+        (first_line..last_line).zip(source_lines)
+      end
+
+      def source_lines
+        ast_node.location.expression.source_buffer.source_lines[
+          first_line - 1,
+          last_line
+        ]
+      end
+
       def find_all(matcher, ret = [])
         ret.tap do
           ret << self if matcher.call(self)
@@ -52,6 +67,7 @@ module Imagen
         self
       end
 
+      # TODO: fix wrong inheritance
       def file_path
         dir
       end
@@ -61,6 +77,10 @@ module Imagen
       end
 
       def last_line
+        nil
+      end
+
+      def source
         nil
       end
 

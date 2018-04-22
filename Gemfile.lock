@@ -53,6 +53,7 @@ PLATFORMS
 DEPENDENCIES
   parser
   pry
+  rainbow
   rake
   rspec
   rubocop

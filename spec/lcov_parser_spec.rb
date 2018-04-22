@@ -18,6 +18,12 @@ describe Undercover::LcovParser do
     expect(second).to eq([[3, 1], [5, 1], [7, 1], [27, 0], [28, 0], [29, 0]])
   end
 
+  it 'passes blank lines' do
+    parser = described_class.new(StringIO.new("\n"))
+
+    expect { parser.parse }.not_to raise_error(Undercover::LcovParseError)
+  end
+
   it 'raises an error with a malformed LCOV' do
     parser = described_class.new(StringIO.new('baconium!'))
 

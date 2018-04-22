@@ -5,6 +5,9 @@ source 'https://rubygems.org'
 gem 'parser'
 gem 'rake'
 
+# TODO: move to undercover
+gem 'rainbow'
+
 group :test, :development do
   gem 'pry', require: false
   gem 'rspec', require: false

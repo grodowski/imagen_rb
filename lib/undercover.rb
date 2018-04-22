@@ -2,6 +2,9 @@
 
 $LOAD_PATH << 'lib'
 require 'imagen'
+require 'pry'
+
+require 'rainbow'
 
 # TODO: Gemify dat!
 module Undercover
@@ -38,7 +41,7 @@ module Undercover
         line_no = $~[1]
         covered = $~[2]
         source_files[@current_filename] << [line_no.to_i, covered.to_i]
-      when /^end_of_record$/
+      when /^end_of_record$/, /^$/
         @current_filename = nil
       else
         raise LcovParseError, "could not recognise '#{line}' as valid LCOV"
@@ -59,8 +62,38 @@ module Undercover
       end
 
       def coverage_f
-        covered = coverage.sum { |ln| ln[1] }
+        covered = coverage.sum { |ln| ln[1].positive? ? 1 : 0 }
         (covered.to_f / coverage.size).round(4)
+      end
+
+      # TODO: create a formatter interface instead and add some tests
+      # Zips coverage data (that doesn't include any non-code lines) with
+      # full source for given code fragment (that includes whitespace).
+      def pretty_print_lines
+        cov_enum = coverage.each
+        cov_source_lines = (node.first_line..node.last_line).map do |line_no|
+          cov_line_no = begin
+            cov_enum.peek[0]
+          rescue StopIteration
+            -1
+          end
+          cov_enum.next[1] if cov_line_no == line_no
+        end
+        cov_source_lines.zip(node.source_lines_with_numbers)
+      end
+
+      # TODO: create a formatter interface instead!
+      def pretty_print
+        lines = pretty_print_lines.map do |covered, (num, line)|
+          if covered == nil
+            "n/a   #{num.to_s.rjust(5)}: #{line}"
+          elsif covered.positive?
+            "#{Rainbow(covered.to_s.ljust(5)).bold.lawngreen} #{Rainbow(num.to_s.rjust(5)).gray}: #{line}"
+          elsif covered.zero?
+            "#{Rainbow('X'.ljust(5)).bold.maroon} #{Rainbow(num.to_s.rjust(5)).gray}: #{line}"
+          end
+        end.join("\n")
+        puts lines
       end
 
       def inspect
@@ -101,7 +134,7 @@ module Undercover
 
     def each_result_arg
       matches_path = lambda do |path|
-        ->(node) { node.file_path == path }
+        ->(node) { node.file_path.end_with?(path) }
       end
 
       lcov.source_files.each do |filename, coverage|
