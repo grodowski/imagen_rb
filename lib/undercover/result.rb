@@ -12,7 +12,9 @@ module Undercover
     end
 
     def coverage_f
-      covered = coverage.sum { |ln| ln[1].positive? ? 1 : 0 }
+      covered = coverage.reduce(0) do |sum, (_, cov)|
+        sum + [[0, cov].max, 1].min
+      end
       (covered.to_f / coverage.size).round(4)
     end
 
@@ -21,7 +23,7 @@ module Undercover
     # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     #
     # Zips coverage data (that doesn't include any non-code lines) with
-    # full source for given code fragment (this includes whitespace).
+    # full source for given code fragment (this includes non-code lines!)
     def pretty_print_lines
       cov_enum = coverage.each
       cov_source_lines = (node.first_line..node.last_line).map do |line_no|
