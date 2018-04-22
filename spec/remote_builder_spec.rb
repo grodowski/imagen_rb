@@ -2,7 +2,6 @@
 
 require 'spec_helper'
 
-# rubocop:disable Metrics/BlockLength
 describe Imagen do
   let(:repo_url) { 'https://github.com/not-existent/bacon' }
   let(:expect_clone) { expect(Imagen::Clone).to receive(:perform) }
@@ -47,4 +46,3 @@ describe Imagen do
     end
   end
 end
-# rubocop:enable Metrics/BlockLength
