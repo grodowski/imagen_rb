@@ -26,25 +26,8 @@ module Undercover
     def parse(args)
       OptionParser.new do |opts|
         # TODO: parse dem options and assign to self
-        # add --commit option (accepts sha, 'staged' or 'unstaged')
+        # add --commit option (accepts sha)
       end.parse!(args)
     end
   end
 end
-
-# we need the same stuff we have in structure which has no git!
-# so, stitch all the things (merge_base + staged + unstaged???)
-
-# TODO: stale coverate lcov error, re-run dem specs
-
-# -previous commit
-# -specific sha/branch/tag
-
-# when :unstaged, :index
-#   [head_commit_sha, @repo.index.diff(options)]
-# when :staged
-#   [head_commit_sha, head.diff(@repo.index, options)]
-# else
-#   merge_base = merge_base(commit)
-#   patches = @repo.diff(merge_base, head, options)
-#   [merge_base, patches]
