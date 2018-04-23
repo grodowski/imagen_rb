@@ -61,7 +61,8 @@ module Undercover
 
     def inspect
       "#<Undercover::Report::Result:#{object_id}" \
-      " name: #{node.name}, coverage: #{coverage_f}>"
+        " name: #{node.name}, coverage: #{coverage_f}>"
     end
+    alias to_s inspect
   end
 end

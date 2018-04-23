@@ -6,6 +6,7 @@ require 'rainbow'
 
 require 'undercover/lcov_parser'
 require 'undercover/result'
+require 'undercover/cli'
 
 # TODO: Gemify dat!
 module Undercover
@@ -13,7 +14,10 @@ module Undercover
     attr_reader :lcov, :code_structure, :results
 
     def initialize(lcov_report_path, code_dir)
+      # TODO: filter LcovParser input based on RUN_MODE (skip some files)
       @lcov = LcovParser.parse(File.open(lcov_report_path))
+      # TODO: filter code_structure based on RUN_MODE
+      # for performance!
       @code_structure = Imagen.from_local(code_dir)
       @results = {}
     end
@@ -37,6 +41,7 @@ module Undercover
     def inspect
       "#<Undercover::Report:#{object_id} results: #{results.size}>"
     end
+    alias to_s inspect
 
     private
 
