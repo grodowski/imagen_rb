@@ -6,6 +6,7 @@ require 'rainbow'
 
 require 'undercover/lcov_parser'
 require 'undercover/result'
+require 'undercover/changeset'
 
 # TODO: Gemify dat!
 module Undercover
