@@ -36,7 +36,7 @@ module Undercover
 
     private
 
-    # Sums `index`, `head` and `compare_base` (if exists),
+    # Diffs `head` or `head` + `compare_base` (if exists),
     # as it makes sense to run Undercover with the most recent file versions
     def full_diff
       base = compare_base_obj || head
