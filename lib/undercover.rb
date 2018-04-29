@@ -16,11 +16,11 @@ module Undercover
                 :lcov,
                 :results
 
-    def initialize(lcov_report_path, code_dir)
+    def initialize(lcov_report_path, code_dir, git_dir: '.git')
       @lcov = LcovParser.parse(File.open(lcov_report_path))
       # TODO: optimise by building changeset structure only!
       @code_structure = Imagen.from_local(code_dir)
-      @changeset = Changeset.new(code_dir).update
+      @changeset = Changeset.new(File.join(code_dir, git_dir)).update
       @results = {}
     end
 

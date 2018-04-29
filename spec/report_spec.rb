@@ -6,8 +6,11 @@ require 'pry'
 
 describe Undercover::Report do
   it 'builds a report with coverage metrics' do
-    skip 'need to supply correct changeset (init a repo?)'
-    report = described_class.new('spec/fixtures/fixtures.lcov', 'spec/fixtures')
+    #skip 'need to supply correct changeset (init a repo?)'
+    report = described_class.new(
+      'spec/fixtures/fixtures.lcov',
+      'spec/fixtures',
+      git_dir: 'test.git')
 
     report.build
 
