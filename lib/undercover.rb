@@ -3,10 +3,12 @@
 $LOAD_PATH << 'lib'
 require 'imagen'
 require 'rainbow'
+require 'bigdecimal'
 
 require 'undercover/lcov_parser'
 require 'undercover/result'
 require 'undercover/changeset'
+require 'undercover/formatter'
 
 # TODO: Gemify dat!
 module Undercover
@@ -16,40 +18,40 @@ module Undercover
                 :lcov,
                 :results
 
+    # TODO: pass merge base as cli argument
+    # add dependecy on "options" for all opts (dirs, git_dir, etc)
     def initialize(lcov_report_path, code_dir, git_dir: '.git')
       @lcov = LcovParser.parse(File.open(lcov_report_path))
       # TODO: optimise by building changeset structure only!
       @code_structure = Imagen.from_local(code_dir)
       @changeset = Changeset.new(File.join(code_dir, git_dir)).update
-      @results = {}
+      @results = Hash.new { |hsh, key| hsh[key] = [] }
+    end
+
+    def build
+      each_result_arg do |filename, coverage, imagen_node|
+        results[filename] << Result.new(imagen_node, coverage, filename)
+      end
+      self
     end
 
     # TODO: this is experimental and might be incorrect!
     # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-    def build
-      each_result_arg do |filename, coverage, imagen_node|
-        results[filename] ||= []
-        results[filename] << Result.new(imagen_node, coverage, filename)
-      end
-
+    def build_warnings
       flagged_results = Set.new
       changeset.each_changed_line do |filepath, line_no|
-        start_line_comp = lambda do |node_line|
-          return 1 if line_no < node_line
-          line_no - node_line
+        dist_from_line_no = lambda do |res|
+          return BigDecimal::INFINITY if line_no < res.first_line
+          line_no - res.first_line
+        end
+        dist_from_line_no_sorter = lambda do |res1, res2|
+          dist_from_line_no[res1] <=> dist_from_line_no[res2]
         end
 
-        res = results[filepath].select { |rest| rest.first_line <= line_no }
-                               .min do |res1, res2|
-          start_line_comp.call(res1.first_line) <=> start_line_comp.call(res2.first_line)
-        end
-
-        if res.uncovered?(line_no)
-          # TODO: ALSO ADD LINE INFO!
-          flagged_results << res
-        end
+        res = results[filepath].min(&dist_from_line_no_sorter)
+        flagged_results << res if res&.uncovered?(line_no)
       end
-      self
+      flagged_results
     end
     # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 

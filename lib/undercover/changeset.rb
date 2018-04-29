@@ -41,7 +41,7 @@ module Undercover
     # as it makes sense to run Undercover with the most recent file versions
     def full_diff
       base = compare_base_obj || head
-      base.diff(repo.index).merge!(repo.index.diff)
+      base.diff(repo.index).merge!(repo.diff_workdir(head))
     end
 
     def compare_base_obj
