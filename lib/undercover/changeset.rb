@@ -18,11 +18,6 @@ module Undercover
       @files = {}
     end
 
-    # TODO: needed???
-    def root_path
-      Pathname.new(repo.path).parent
-    end
-
     def update
       full_diff.each_patch do |patch|
         filepath = patch.delta.new_file[:path]
@@ -32,6 +27,12 @@ module Undercover
         end.flatten!
       end
       self
+    end
+
+    def each_changed_line
+      files.each do |filepath, line_numbers|
+        line_numbers.each { |ln| yield filepath, ln }
+      end
     end
 
     private

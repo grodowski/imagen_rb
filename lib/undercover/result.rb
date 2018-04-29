@@ -2,13 +2,33 @@
 
 module Undercover
   class Result
-    attr_reader :node, :coverage
+    extend Forwardable
 
-    def initialize(node, file_cov)
+    attr_reader :node, :coverage, :file_path
+
+    def_delegators :node, :first_line, :last_line
+
+    def initialize(node, file_cov, file_path)
       @node = node
       @coverage = file_cov.select do |ln, _|
-        ln > node.first_line && ln < node.last_line
+        ln > first_line && ln < last_line
       end
+      @file_path = file_path
+    end
+
+    def non_code?(line_no)
+      line_cov = coverage.find { |ln, _cov| ln == line_no }
+      !line_cov
+    end
+
+    def covered?(line_no)
+      line_cov = coverage.find { |ln, _cov| ln == line_no }
+      line_cov && line_cov[1].positive?
+    end
+
+    def uncovered?(line_no)
+      line_cov = coverage.find { |ln, _cov| ln == line_no }
+      line_cov && line_cov[1].zero?
     end
 
     def coverage_f
