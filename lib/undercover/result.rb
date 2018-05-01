@@ -2,13 +2,34 @@
 
 module Undercover
   class Result
-    attr_reader :node, :coverage
+    extend Forwardable
 
-    def initialize(node, file_cov)
+    attr_reader :node, :coverage, :file_path
+
+    def_delegators :node, :first_line, :last_line
+
+    def initialize(node, file_cov, file_path)
       @node = node
       @coverage = file_cov.select do |ln, _|
-        ln > node.first_line && ln < node.last_line
+        ln > first_line && ln < last_line
       end
+      @file_path = file_path
+    end
+
+    # TODO: make DRY
+    def non_code?(line_no)
+      line_cov = coverage.find { |ln, _cov| ln == line_no }
+      !line_cov
+    end
+
+    def covered?(line_no)
+      line_cov = coverage.find { |ln, _cov| ln == line_no }
+      line_cov && line_cov[1].positive?
+    end
+
+    def uncovered?(line_no)
+      line_cov = coverage.find { |ln, _cov| ln == line_no }
+      line_cov && line_cov[1].zero?
     end
 
     def coverage_f
@@ -37,10 +58,10 @@ module Undercover
       cov_source_lines.zip(node.source_lines_with_numbers)
     end
 
-    # TODO: create a formatter interface instead!
+    # TODO: move to formatter interface instead!
     def pretty_print
       pad = node.last_line.to_s.length
-      lines = pretty_print_lines.map do |covered, (num, line)|
+      pretty_print_lines.map do |covered, (num, line)|
         formatted_line = "#{num.to_s.rjust(pad)}: #{line}"
         if line.strip.length.zero?
           Rainbow(formatted_line).darkgray.dark
@@ -55,9 +76,12 @@ module Undercover
             Rainbow(" hits: #{covered}").italic.darkgray.dark
         end
       end.join("\n")
-      puts lines
     end
     # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+
+    def file_path_with_lines
+      "#{file_path}:#{first_line}:#{last_line}"
+    end
 
     def inspect
       "#<Undercover::Report::Result:#{object_id}" \

@@ -21,7 +21,7 @@ describe Undercover::LcovParser do
   it 'passes blank lines' do
     parser = described_class.new(StringIO.new("\n"))
 
-    expect { parser.parse }.not_to raise_error(Undercover::LcovParseError)
+    expect { parser.parse }.not_to raise_error
   end
 
   it 'raises an error with a malformed LCOV' do
