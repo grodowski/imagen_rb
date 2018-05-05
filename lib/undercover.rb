@@ -10,6 +10,7 @@ require 'undercover/result'
 require 'undercover/cli'
 require 'undercover/changeset'
 require 'undercover/formatter'
+require 'undercover/options'
 
 # TODO: Gemify dat!
 module Undercover

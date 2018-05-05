@@ -11,6 +11,8 @@ end
 require 'rspec'
 require 'imagen'
 
+require 'undercover'
+
 # Matchers compatible with Imagen::Node::Base#find_all
 def of_type(type)
   ->(node) { node.is_a?(type) }
