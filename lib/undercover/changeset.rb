@@ -14,6 +14,7 @@ module Undercover
     def initialize(dir, compare_base = nil)
       @dir = dir
       @repo = Rugged::Repository.new(dir)
+      @repo.workdir = Pathname.new(dir).dirname.to_s # TODO: can replace?
       @compare_base = compare_base
       @files = {}
     end

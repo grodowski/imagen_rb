@@ -4,22 +4,44 @@ require 'spec_helper'
 
 describe Undercover::CLI do
   it 'creates an Undercover::Report with defaults' do
+    stub_build
     expect(Undercover::Report)
       .to receive(:new)
-      .with(a_string_ending_with('coverage/lcov/imagen-rb.lcov'), '.', '.git')
+      .with(
+        a_string_ending_with('coverage/lcov/imagen-rb.lcov'),
+        '.',
+        git_dir: '.git'
+      )
+      .and_call_original
     subject.run
   end
 
   it 'creates an Undercover::Report with options' do
+    stub_build
     expect(Undercover::Report)
       .to receive(:new)
-      .with('custom-dir/custom-lcov', 'subproject/custom-dir', '.git')
-    subject.run(%w[--lcov=custom-dir/custom-lcov --path=subproject/custom-dir])
+      .with('spec/fixtures/sample.lcov', 'spec/fixtures', git_dir: 'test.git')
+      .and_call_original
+    subject.run(%w[-lspec/fixtures/sample.lcov -pspec/fixtures -gtest.git])
   end
 
-  xit 'returns 0 exit code on success' do
+  it 'returns 0 exit code on success' do
+    mock_report = instance_double(Undercover::Report)
+    stub_build.and_return(mock_report)
+
+    expect(mock_report).to receive(:build_warnings) { [] }
+    expect(subject.run).to eq(0)
   end
 
-  xit 'returns 1 exit code on success' do
+  it 'returns 1 exit code on warnings' do
+    mock_report = instance_double(Undercover::Report)
+    stub_build.and_return(mock_report)
+
+    expect(mock_report).to receive(:build_warnings) { [double] }
+    expect(subject.run).to eq(1)
+  end
+
+  def stub_build
+    allow_any_instance_of(Undercover::Report).to receive(:build) { |rep| rep }
   end
 end

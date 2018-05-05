@@ -39,7 +39,6 @@ module Undercover
           exit
         end
 
-        # Another typical switch to print the version.
         opts.on_tail('--version', 'Show version') do
           puts Version
           exit
@@ -47,10 +46,10 @@ module Undercover
 
         lcov_path_option(opts)
         project_path_option(opts)
+        git_dir_option(opts)
 
         # TODO: parse dem other options and assign to self
         # --compare (accepts sha or branch, defaults nil)
-        # --git-dir (git dir, default '.git')
         # --quiet (skip progress bar)
         # --exit-status (do not print report, just exit)
         # --ruby-version (string, like '2.4.4', how to support in parser?)
@@ -70,6 +69,12 @@ module Undercover
     def project_path_option(parser)
       parser.on('-p', '--path path') do |path|
         self.path = path
+      end
+    end
+
+    def git_dir_option(parser)
+      parser.on('-g', '--git-dir dir') do |dir|
+        self.git_dir = dir
       end
     end
 

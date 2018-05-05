@@ -10,8 +10,12 @@ module Undercover
     # TODO: add executable in ./bin later
     def self.run(args = ARGV)
       opts = Undercover::Options.new.parse(args)
-      Undercover::Report.new(opts.lcov, opts.path, opts.git_dir)
-      0
+      report = Undercover::Report.new(
+        opts.lcov,
+        opts.path,
+        git_dir: opts.git_dir
+      ).build
+      report.build_warnings.any? ? 1 : 0
     end
   end
 end
