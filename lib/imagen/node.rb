@@ -24,6 +24,10 @@ module Imagen
         ast_node.location.first_line
       end
 
+      def line_numbers
+        (first_line..last_line).to_a
+      end
+
       def last_line
         ast_node.location.last_line
       end

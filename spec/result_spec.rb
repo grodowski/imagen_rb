@@ -13,21 +13,21 @@ describe Undercover::Result do
 
   it 'computes class coverage as float' do
     node = ast.find_all(with_name('BaconClass')).first
-    result = described_class.new(node, coverage)
+    result = described_class.new(node, coverage, 'class.rb')
 
     expect(result.coverage_f).to eq(0.8333)
   end
 
   it 'computes method coverage as float' do
     node = ast.find_all(with_name('bar')).first
-    result = described_class.new(node, coverage)
+    result = described_class.new(node, coverage, 'class.rb')
 
     expect(result.coverage_f).to eq(1.0)
   end
 
   it 'computes coverage for a not covered method' do
     node = ast.find_all(with_name('foo')).first
-    result = described_class.new(node, coverage)
+    result = described_class.new(node, coverage, 'class.rb')
 
     expect(result.coverage_f).to eq(0.0)
   end
