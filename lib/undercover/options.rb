@@ -74,8 +74,8 @@ module Undercover
     end
 
     def guess_lcov_path
-      project_dir = Pathname.pwd.split.last.to_s
-      File.join(project_dir, 'coverage', 'lcov', "#{project_dir}.lcov")
+      pwd = Pathname.pwd
+      File.join(pwd, 'coverage', 'lcov', "#{pwd.split.last}.lcov")
     end
   end
 end
