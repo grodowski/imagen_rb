@@ -15,7 +15,9 @@ module Undercover
         opts.path,
         git_dir: opts.git_dir
       ).build
-      report.build_warnings.any? ? 1 : 0
+      warnings = report.build_warnings
+      puts Undercover::Formatter.new(warnings)
+      warnings.any? ? 1 : 0
     end
   end
 end

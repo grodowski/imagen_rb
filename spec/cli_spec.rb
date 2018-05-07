@@ -37,6 +37,8 @@ describe Undercover::CLI do
     mock_report = instance_double(Undercover::Report)
     stub_build.and_return(mock_report)
 
+    allow(Undercover::Formatter).to receive(:new)
+
     expect(mock_report).to receive(:build_warnings) { [double] }
     expect(subject.run).to eq(1)
   end
