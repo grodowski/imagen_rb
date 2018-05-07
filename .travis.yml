@@ -1,6 +1,6 @@
 language: ruby
 rvm:
-  - 2.5.0
+  - 2.5.1
   - 2.4.4
   - 2.3.4
 before_install:
