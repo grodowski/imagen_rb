@@ -23,12 +23,12 @@ module Undercover
     end
 
     def success
-      "#{Rainbow('undercover').bold.lawngreen}: ✅ No coverage" \
+      "#{Rainbow('undercover').bold.green}: ✅ No coverage" \
       ' is missing in latest changes'
     end
 
     def warnings_header
-      "#{Rainbow('undercover').bold.maroon}: " \
+      "#{Rainbow('undercover').bold.red}: " \
       '👮‍♂️ some methods have no coverage! Please add specs for methods' \
       ' listed below (or re-run the suite to refresh coverage data)'
     end

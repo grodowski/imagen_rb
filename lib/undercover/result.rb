@@ -71,10 +71,10 @@ module Undercover
           Rainbow(formatted_line).darkgray.dark + \
             Rainbow(' hits: n/a').italic.darkgray.dark
         elsif covered.positive?
-          Rainbow(formatted_line).bold.lawngreen + \
+          Rainbow(formatted_line).green + \
             Rainbow(" hits: #{covered}").italic.darkgray.dark
         elsif covered.zero?
-          Rainbow(formatted_line).bold.maroon + \
+          Rainbow(formatted_line).red + \
             Rainbow(" hits: #{covered}").italic.darkgray.dark
         end
       end.join("\n")
