@@ -16,7 +16,7 @@ module Undercover
     def formatted_warnings
       @results.map.with_index(1) do |res, idx|
         "🚨 #{idx}) node `#{res.node.name}` type: #{res.node.class},\n" +
-          (' ' * pad_size) + "loc: #{res.file_path_with_lines}," +
+          (' ' * pad_size) + "loc: #{res.file_path_with_lines}," \
           "coverage: #{res.coverage_f * 100}%\n" +
           res.pretty_print
       end
