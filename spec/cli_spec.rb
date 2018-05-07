@@ -64,6 +64,9 @@ describe Undercover::CLI do
   end
 
   def stub_build
+    lcov = double
+    allow(File).to receive(:open) { lcov }
+    allow(Undercover::LcovParser).to receive(:parse).with(lcov)
     allow_any_instance_of(Undercover::Report).to receive(:build) { |rep| rep }
   end
 end
