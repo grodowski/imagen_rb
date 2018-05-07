@@ -26,11 +26,12 @@ module Undercover
       @lcov = LcovParser.parse(File.open(lcov_report_path))
       # TODO: optimise by building changeset structure only!
       @code_structure = Imagen.from_local(code_dir)
-      @changeset = Changeset.new(File.join(code_dir, git_dir), compare).update
+      @changeset = Changeset.new(File.join(code_dir, git_dir), compare)
       @results = Hash.new { |hsh, key| hsh[key] = [] }
     end
 
     def build
+      changeset.update
       each_result_arg do |filename, coverage, imagen_node|
         results[filename] << Result.new(imagen_node, coverage, filename)
       end

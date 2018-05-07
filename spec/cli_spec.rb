@@ -67,6 +67,7 @@ describe Undercover::CLI do
     lcov = double
     allow(File).to receive(:open) { lcov }
     allow(Undercover::LcovParser).to receive(:parse).with(lcov)
+    allow(Imagen).to receive(:from_local)
     allow_any_instance_of(Undercover::Report).to receive(:build) { |rep| rep }
   end
 end
