@@ -5,8 +5,7 @@ require 'undercover'
 require 'pry'
 
 describe Undercover::Report do
-  # TODO: cannot scan a repository :o
-  xit 'builds a report with coverage metrics' do
+  it 'builds a report with coverage metrics' do
     report = described_class.new(
       'spec/fixtures/fixtures.lcov',
       'spec/fixtures',

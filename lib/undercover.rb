@@ -7,8 +7,10 @@ require 'bigdecimal'
 
 require 'undercover/lcov_parser'
 require 'undercover/result'
+require 'undercover/cli'
 require 'undercover/changeset'
 require 'undercover/formatter'
+require 'undercover/options'
 
 # TODO: Gemify dat!
 module Undercover
@@ -20,15 +22,16 @@ module Undercover
 
     # TODO: pass merge base as cli argument
     # add dependecy on "options" for all opts (dirs, git_dir, etc)
-    def initialize(lcov_report_path, code_dir, git_dir: '.git')
+    def initialize(lcov_report_path, code_dir, git_dir: '.git', compare: nil)
       @lcov = LcovParser.parse(File.open(lcov_report_path))
       # TODO: optimise by building changeset structure only!
       @code_structure = Imagen.from_local(code_dir)
-      @changeset = Changeset.new(File.join(code_dir, git_dir)).update
+      @changeset = Changeset.new(File.join(code_dir, git_dir), compare)
       @results = Hash.new { |hsh, key| hsh[key] = [] }
     end
 
     def build
+      changeset.update
       each_result_arg do |filename, coverage, imagen_node|
         results[filename] << Result.new(imagen_node, coverage, filename)
       end
@@ -62,6 +65,7 @@ module Undercover
     def inspect
       "#<Undercover::Report:#{object_id} results: #{results.size}>"
     end
+    alias to_s inspect
 
     private
 

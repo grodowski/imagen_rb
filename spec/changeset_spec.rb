@@ -2,10 +2,6 @@
 
 require 'spec_helper'
 
-require 'undercover'
-
-require 'pry'
-
 # These tests use the the fixture repo test.git
 # use `git --git-dir=test.git <command>` to inspect
 # or modify it.
