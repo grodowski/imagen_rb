@@ -22,11 +22,11 @@ module Undercover
 
     # TODO: pass merge base as cli argument
     # add dependecy on "options" for all opts (dirs, git_dir, etc)
-    def initialize(lcov_report_path, code_dir, git_dir: '.git')
+    def initialize(lcov_report_path, code_dir, git_dir: '.git', compare: nil)
       @lcov = LcovParser.parse(File.open(lcov_report_path))
       # TODO: optimise by building changeset structure only!
       @code_structure = Imagen.from_local(code_dir)
-      @changeset = Changeset.new(File.join(code_dir, git_dir)).update
+      @changeset = Changeset.new(File.join(code_dir, git_dir), compare).update
       @results = Hash.new { |hsh, key| hsh[key] = [] }
     end
 

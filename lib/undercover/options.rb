@@ -17,7 +17,7 @@ module Undercover
       # OUTPUT_CIRCLEMATOR = :circlemator # posts warnings as review comments
     ].freeze
 
-    attr_accessor :lcov, :path, :git_dir
+    attr_accessor :lcov, :path, :git_dir, :compare
 
     def initialize
       # TODO: use run modes
@@ -48,9 +48,8 @@ module Undercover
         lcov_path_option(opts)
         project_path_option(opts)
         git_dir_option(opts)
-
+        compare_option(opts)
         # TODO: parse dem other options and assign to self
-        # --compare (accepts sha or branch, defaults nil)
         # --quiet (skip progress bar)
         # --exit-status (do not print report, just exit)
         # --ruby-version (string, like '2.4.4', how to support in parser?)
@@ -62,20 +61,28 @@ module Undercover
     private
 
     def lcov_path_option(parser)
-      parser.on('-l', '--lcov path') do |path|
+      parser.on('-l', '--lcov path', 'LCOV report file path') do |path|
         self.lcov = path
       end
     end
 
     def project_path_option(parser)
-      parser.on('-p', '--path path') do |path|
+      parser.on('-p', '--path path', 'Project directory') do |path|
         self.path = path
       end
     end
 
     def git_dir_option(parser)
-      parser.on('-g', '--git-dir dir') do |dir|
+      desc = 'Override `.git` with a custom directory'
+      parser.on('-g', '--git-dir dir', desc) do |dir|
         self.git_dir = dir
+      end
+    end
+
+    def compare_option(parser)
+      desc = 'Generate coverage warnings for all changes after `ref`'
+      parser.on('-c', '--compare ref', desc) do |ref|
+        self.compare = ref
       end
     end
 

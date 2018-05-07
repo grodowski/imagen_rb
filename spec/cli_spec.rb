@@ -10,7 +10,8 @@ describe Undercover::CLI do
       .with(
         a_string_ending_with('coverage/lcov/imagen-rb.lcov'),
         '.',
-        git_dir: '.git'
+        git_dir: '.git',
+        compare: nil
       )
       .and_call_original
     subject.run
@@ -20,9 +21,28 @@ describe Undercover::CLI do
     stub_build
     expect(Undercover::Report)
       .to receive(:new)
-      .with('spec/fixtures/sample.lcov', 'spec/fixtures', git_dir: 'test.git')
+      .with(
+        'spec/fixtures/sample.lcov',
+        'spec/fixtures',
+        git_dir: 'test.git',
+        compare: nil
+      )
       .and_call_original
     subject.run(%w[-lspec/fixtures/sample.lcov -pspec/fixtures -gtest.git])
+  end
+
+  it 'accepts --compare' do
+    stub_build
+    expect(Undercover::Report)
+      .to receive(:new)
+      .with(
+        a_string_ending_with('coverage/lcov/imagen-rb.lcov'),
+        '.',
+        git_dir: '.git',
+        compare: 'master'
+      )
+      .and_call_original
+    subject.run(%w[-cmaster])
   end
 
   it 'returns 0 exit code on success' do

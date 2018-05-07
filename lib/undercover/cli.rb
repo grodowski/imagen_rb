@@ -13,7 +13,8 @@ module Undercover
       report = Undercover::Report.new(
         opts.lcov,
         opts.path,
-        git_dir: opts.git_dir
+        git_dir: opts.git_dir,
+        compare: opts.compare
       ).build
       warnings = report.build_warnings
       puts Undercover::Formatter.new(warnings)

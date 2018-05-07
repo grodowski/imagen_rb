@@ -15,10 +15,9 @@ module Undercover
 
     def formatted_warnings
       @results.map.with_index(1) do |res, idx|
-        "🚨 #{idx}) node `#{res.node.name}` needs " \
-        "test coverage! type: #{res.node.class},\n" \
-        "   loc: #{res.file_path_with_lines}, " \
-        "coverage: #{res.coverage_f * 100}%\n" +
+        "🚨 #{idx}) node `#{res.node.name}` type: #{res.node.class},\n" +
+          (' ' * pad_size) + "loc: #{res.file_path_with_lines}," +
+          "coverage: #{res.coverage_f * 100}%\n" +
           res.pretty_print
       end
     end
@@ -32,6 +31,10 @@ module Undercover
       "#{Rainbow('undercover').bold.maroon}: " \
       '👮‍♂️ some methods have no coverage! Please add specs for methods' \
       ' listed below (or re-run the suite to refresh coverage data)'
+    end
+
+    def pad_size
+      5 + (@results.size - 1).to_s.length
     end
   end
 end
