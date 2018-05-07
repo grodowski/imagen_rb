@@ -14,7 +14,7 @@ describe Undercover::CLI do
         compare: nil
       )
       .and_call_original
-    subject.run
+    subject.run([])
   end
 
   it 'creates an Undercover::Report with options' do
@@ -50,7 +50,7 @@ describe Undercover::CLI do
     stub_build.and_return(mock_report)
 
     expect(mock_report).to receive(:build_warnings) { [] }
-    expect(subject.run).to eq(0)
+    expect(subject.run([])).to eq(0)
   end
 
   it 'returns 1 exit code on warnings' do
@@ -60,7 +60,7 @@ describe Undercover::CLI do
     allow(Undercover::Formatter).to receive(:new)
 
     expect(mock_report).to receive(:build_warnings) { [double] }
-    expect(subject.run).to eq(1)
+    expect(subject.run([])).to eq(1)
   end
 
   def stub_build

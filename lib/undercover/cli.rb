@@ -8,7 +8,7 @@ module Undercover
     # traversing the whole project at first!
 
     # TODO: add executable in ./bin later
-    def self.run(args = ARGV)
+    def self.run(args)
       opts = Undercover::Options.new.parse(args)
       report = Undercover::Report.new(
         opts.lcov,

@@ -8,7 +8,7 @@ require 'benchmark'
 
 result = 0
 time = Benchmark.realtime do
-  result = Undercover::CLI.run
+  result = Undercover::CLI.run(ARGV)
 end
 
 puts "Undercover finished in #{time}ms"
