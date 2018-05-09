@@ -8,7 +8,7 @@ module Undercover
     # TODO: Report calls >parser< for each file instead of
     # traversing the whole project at first!
 
-    CLI_WARNINGS_TO_S = {
+    WARNINGS_TO_S = {
       stale_coverage: Rainbow('♻️  Coverage data is older than your' \
         'latest changes. Re-run tests to update').yellow,
       no_changes: Rainbow('✅ No coverage changes').green
@@ -27,7 +27,7 @@ module Undercover
 
       error = report.validate(opts.lcov)
       if error
-        puts(CLI_WARNINGS_TO_S[error])
+        puts(WARNINGS_TO_S[error])
         return 1
       end
 

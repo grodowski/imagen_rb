@@ -63,6 +63,17 @@ describe Undercover::CLI do
     expect(subject.run([])).to eq(1)
   end
 
+  it 'prints changeset validation errors' do
+    mock_report = instance_double(Undercover::Report, validate: :stale_coverage)
+    stub_build.and_return(mock_report)
+
+    expected_output = Undercover::CLI::WARNINGS_TO_S[:stale_coverage] + "\n"
+
+    expect do
+      expect(subject.run([])).to eq(1)
+    end.to output(expected_output).to_stdout
+  end
+
   # rubocop:disable Metrics/AbcSize
   def stub_build
     lcov = double
