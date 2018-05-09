@@ -1,5 +1,10 @@
-.bundle
-coverage
-.env
 .ruby-version
 .ruby-gemset
+.yardoc
+.bundle/
+coverage/
+_yardoc/
+doc/
+pkg/
+spec/reports/
+tmp/

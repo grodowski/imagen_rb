@@ -8,7 +8,7 @@ describe Undercover::CLI do
     expect(Undercover::Report)
       .to receive(:new)
       .with(
-        a_string_ending_with('coverage/lcov/imagen-rb.lcov'),
+        a_string_ending_with('coverage/lcov/imagen_rb.lcov'),
         '.',
         git_dir: '.git',
         compare: nil
@@ -36,7 +36,7 @@ describe Undercover::CLI do
     expect(Undercover::Report)
       .to receive(:new)
       .with(
-        a_string_ending_with('coverage/lcov/imagen-rb.lcov'),
+        a_string_ending_with('coverage/lcov/imagen_rb.lcov'),
         '.',
         git_dir: '.git',
         compare: 'HEAD~1'
