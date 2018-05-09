@@ -17,7 +17,7 @@ module Undercover
       @results.map.with_index(1) do |res, idx|
         "🚨 #{idx}) node `#{res.node.name}` type: #{res.node.class},\n" +
           (' ' * pad_size) + "loc: #{res.file_path_with_lines}," \
-          "coverage: #{res.coverage_f * 100}%\n" +
+          " coverage: #{res.coverage_f * 100}%\n" +
           res.pretty_print
       end
     end
@@ -29,8 +29,8 @@ module Undercover
 
     def warnings_header
       "#{Rainbow('undercover').bold.red}: " \
-      '👮‍♂️ some methods have no coverage! Please add specs for methods' \
-      ' listed below (or re-run the suite to refresh coverage data)'
+      '👮‍♂️ some methods have no test coverage! Please add specs for' \
+      ' methods listed below'
     end
 
     def pad_size

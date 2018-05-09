@@ -22,18 +22,31 @@ module Undercover
     def update
       full_diff.each_patch do |patch|
         filepath = patch.delta.new_file[:path]
-        @files[filepath] = patch.each_hunk.map do |hunk|
+        line_nums = patch.each_hunk.map do |hunk|
           # TODO: optimise this to use line ranges!
           hunk.lines.select(&:addition?).map(&:new_lineno)
         end.flatten!
+        @files[filepath] = line_nums if line_nums.any?
       end
       self
+    end
+
+    def last_modified
+      mod = files.keys.map { |f| File.mtime(File.join(repo.workdir, f)) }.max
+      mod || Time.strptime('0', '%s')
     end
 
     def each_changed_line
       files.each do |filepath, line_numbers|
         line_numbers.each { |ln| yield filepath, ln }
       end
+    end
+
+    # TODO: refactor to a standalone validator (depending on changeset AND lcov)
+    # TODO: add specs
+    def validate(lcov_report_path)
+      return :no_changes if files.empty?
+      return :stale_coverage if last_modified > File.mtime(lcov_report_path)
     end
 
     private

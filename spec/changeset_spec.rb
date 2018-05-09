@@ -27,4 +27,17 @@ describe Undercover::Changeset do
     expect(changeset.files['file_two']).to eq([7, 10, 11])
     expect(changeset.files['file_three']).to eq([1, 2, 3, 4, 5, 6])
   end
+
+  it 'has a last modufied timestamp' do
+    `touch spec/undercover_fixtures/file_one`
+
+    changeset = Undercover::Changeset.new(
+      'spec/undercover_fixtures/test.git',
+      'master'
+    ).update
+
+    expect(changeset.last_modified).to be_instance_of(Time)
+    expect(changeset.last_modified.strftime('%D'))
+      .to eq(Time.now.strftime('%D'))
+  end
 end

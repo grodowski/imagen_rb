@@ -4,6 +4,7 @@ $LOAD_PATH << 'lib'
 require 'imagen'
 require 'rainbow'
 require 'bigdecimal'
+require 'forwardable'
 
 require 'undercover/lcov_parser'
 require 'undercover/result'
@@ -15,6 +16,9 @@ require 'undercover/options'
 # TODO: Gemify dat!
 module Undercover
   class Report
+    extend Forwardable
+    def_delegators :changeset, :validate
+
     attr_reader :changeset,
                 :code_structure,
                 :lcov,
@@ -26,12 +30,11 @@ module Undercover
       @lcov = LcovParser.parse(File.open(lcov_report_path))
       # TODO: optimise by building changeset structure only!
       @code_structure = Imagen.from_local(code_dir)
-      @changeset = Changeset.new(File.join(code_dir, git_dir), compare)
+      @changeset = Changeset.new(File.join(code_dir, git_dir), compare).update
       @results = Hash.new { |hsh, key| hsh[key] = [] }
     end
 
     def build
-      changeset.update
       each_result_arg do |filename, coverage, imagen_node|
         results[filename] << Result.new(imagen_node, coverage, filename)
       end
