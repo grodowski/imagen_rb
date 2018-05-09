@@ -11,8 +11,6 @@ require 'imagen/remote_builder'
 module Imagen
   EXCLUDE_RE = /_(spec|test).rb$/
 
-  VERSION = '0.1.0'
-
   def self.from_local(dir)
     Node::Root.new.build_from_dir(dir)
   end
