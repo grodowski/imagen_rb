@@ -32,7 +32,8 @@ module Undercover
     end
 
     def last_modified
-      files.keys.map { |f| File.mtime(File.join(repo.workdir, f)) }.max
+      mod = files.keys.map { |f| File.mtime(File.join(repo.workdir, f)) }.max
+      mod || Time.strptime('0', '%s')
     end
 
     def each_changed_line
@@ -42,9 +43,10 @@ module Undercover
     end
 
     # TODO: refactor to a standalone validator (depending on changeset AND lcov)
+    # TODO: add specs
     def validate(lcov_report_path)
-      return :stale_coverage if last_modified > File.mtime(lcov_report_path)
       return :no_changes if files.empty?
+      return :stale_coverage if last_modified > File.mtime(lcov_report_path)
     end
 
     private
