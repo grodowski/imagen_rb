@@ -32,7 +32,7 @@ module Undercover
     end
 
     def last_modified
-      files.keys.map { |f| File.mtime(File.join(repo.workdir, f)) }.sort.last
+      files.keys.map { |f| File.mtime(File.join(repo.workdir, f)) }.max
     end
 
     def each_changed_line

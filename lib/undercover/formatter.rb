@@ -29,8 +29,8 @@ module Undercover
 
     def warnings_header
       "#{Rainbow('undercover').bold.red}: " \
-      '👮‍♂️ some methods have no coverage! Please add specs for methods' \
-      ' listed below (or re-run the suite to refresh coverage data)'
+      '👮‍♂️ some methods have no test coverage! Please add specs for' \
+      ' methods listed below'
     end
 
     def pad_size
