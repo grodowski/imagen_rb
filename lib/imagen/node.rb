@@ -12,6 +12,10 @@ module Imagen
         @children = []
       end
 
+      def human_name
+        raise NotImplementedError
+      end
+
       def build_from_ast(ast_node)
         tap { @ast_node = ast_node }
       end
@@ -71,6 +75,10 @@ module Imagen
         self
       end
 
+      def human_name
+        'root'
+      end
+
       # TODO: fix wrong inheritance
       def file_path
         dir
@@ -102,6 +110,10 @@ module Imagen
         super
         tap { @name = ast_node.children[0].children[1].to_s }
       end
+
+      def human_name
+        'module'
+      end
     end
 
     # Represents a Ruby class
@@ -109,6 +121,10 @@ module Imagen
       def build_from_ast(ast_node)
         super
         tap { @name = ast_node.children[0].children[1].to_s }
+      end
+
+      def human_name
+        'class'
       end
     end
 
@@ -118,6 +134,10 @@ module Imagen
         super
         tap { @name = ast_node.children[1].to_s }
       end
+
+      def human_name
+        'class method'
+      end
     end
 
     # Represents a Ruby instance method
@@ -125,6 +145,10 @@ module Imagen
       def build_from_ast(ast_node)
         super
         tap { @name = ast_node.children[0].to_s }
+      end
+
+      def human_name
+        'instance method'
       end
     end
   end
