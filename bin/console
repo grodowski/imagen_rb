@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 require 'bundler/setup'
-require 'imagen_rb'
+require 'imagen.rb'
 
 require 'pry'
 Pry.start
