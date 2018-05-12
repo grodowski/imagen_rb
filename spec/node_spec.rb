@@ -40,3 +40,101 @@ describe Imagen::Node::Base do
     )
   end
 end
+
+describe Imagen::Node::Root do
+  let(:input) do
+    <<-STR
+      if 2 + 2 == 5
+        puts 'wow'
+      end
+    STR
+  end
+
+  let(:node) do
+    described_class.new.build_from_ast(Parser::CurrentRuby.parse(input))
+  end
+
+  it 'has human name' do
+    expect(node.human_name).to eq('root')
+  end
+end
+
+describe Imagen::Node::Module do
+  let(:input) do
+    <<-STR
+      module Foo
+        if 2 + 2 == 5
+          puts 'wow'
+        end
+      end
+    STR
+  end
+
+  let(:node) do
+    described_class.new.build_from_ast(Parser::CurrentRuby.parse(input))
+  end
+
+  it 'has human name' do
+    expect(node.human_name).to eq('module')
+  end
+end
+
+describe Imagen::Node::Class do
+  let(:input) do
+    <<-STR
+      class Bar
+        if 2 + 2 == 5
+          puts 'wow'
+        end
+      end
+    STR
+  end
+
+  let(:node) do
+    described_class.new.build_from_ast(Parser::CurrentRuby.parse(input))
+  end
+
+  it 'has human name' do
+    expect(node.human_name).to eq('class')
+  end
+end
+
+describe Imagen::Node::CMethod do
+  let(:input) do
+    <<-STR
+      class Tom
+        def self.taylor
+          puts 'wow'
+        end
+      end
+    STR
+  end
+
+  let(:node) do
+    described_class.new.build_from_ast(Parser::CurrentRuby.parse(input))
+  end
+
+  it 'has human name' do
+    expect(node.human_name).to eq('class method')
+  end
+end
+
+describe Imagen::Node::IMethod do
+  let(:input) do
+    <<-STR
+      class Hello
+        def darkness
+          puts 'my old friend'
+        end
+      end
+    STR
+  end
+
+  let(:node) do
+    described_class.new.build_from_ast(Parser::CurrentRuby.parse(input))
+  end
+
+  it 'has human name' do
+    expect(node.human_name).to eq('instance method')
+  end
+end
