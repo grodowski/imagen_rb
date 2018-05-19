@@ -168,7 +168,7 @@ module Imagen
       def args_list
         arg_nodes = ast_node.children.find { |n| n.type == :args }.children
         arg_names = arg_nodes.map { |arg| arg.children[0] }
-        return '' if arg_names.empty?
+        return if arg_names.empty?
         "(#{arg_names.join(', ')})"
       end
     end
