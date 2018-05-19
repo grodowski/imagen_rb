@@ -4,10 +4,11 @@ module Imagen
   # AST Traversal that calls respective builder methods from Imagen::Node
   class Visitor
     TYPES = {
+      block: Imagen::Node::Block,
       class: Imagen::Node::Class,
-      module: Imagen::Node::Module,
+      def: Imagen::Node::IMethod,
       defs: Imagen::Node::CMethod,
-      def: Imagen::Node::IMethod
+      module: Imagen::Node::Module
     }.freeze
 
     attr_reader :root, :current_root, :file_path

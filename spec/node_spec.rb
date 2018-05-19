@@ -138,3 +138,21 @@ describe Imagen::Node::IMethod do
     expect(node.human_name).to eq('instance method')
   end
 end
+
+describe Imagen::Node::Block do
+  let(:input) do
+    <<-STR
+      (0..1).each do
+        puts 'my old friend, block'
+      end
+    STR
+  end
+
+  let(:node) do
+    described_class.new.build_from_ast(Parser::CurrentRuby.parse(input))
+  end
+
+  it 'has a human name' do
+    expect(node.human_name).to eq('block')
+  end
+end

@@ -43,6 +43,9 @@ describe Imagen do
 
       cmethods = root.find_all(of_type(Imagen::Node::CMethod))
       expect(cmethods.map(&:name)).to include('foo', 'bar')
+
+      blocks = root.find_all(of_type(Imagen::Node::Block))
+      expect(blocks.map(&:name)).to eq(['block (x)', 'block (env, _params)'])
     end
   end
 end
