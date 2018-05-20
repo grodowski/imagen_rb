@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'tempfile'
 
 describe Imagen::Node::Base do
   let(:ast) { Parser::CurrentRuby.parse_file('spec/fixtures/class.rb') }
@@ -50,12 +51,30 @@ describe Imagen::Node::Root do
     STR
   end
 
-  let(:node) do
-    described_class.new.build_from_ast(Parser::CurrentRuby.parse(input))
+  describe '#human_name' do
+    let(:node) do
+      described_class.new.build_from_ast(Parser::CurrentRuby.parse(input))
+    end
+
+    it 'has human name' do
+      expect(node.human_name).to eq('root')
+    end
   end
 
-  it 'has human name' do
-    expect(node.human_name).to eq('root')
+  it 'builds from file' do
+    node = described_class.new.build_from_file('spec/fixtures/class.rb')
+
+    expect(node).to be_a(Imagen::Node::Root)
+    expect(node.children[0].source_lines.length).to eq(17)
+  end
+
+  it 'prints syntax errors' do
+    Tempfile.open do |f|
+      f.write("do puts 'incomplete' end")
+      f.flush
+      expect { described_class.new.build_from_file(f.path) }
+        .to output(/unexpected token kDO/).to_stderr
+    end
   end
 end
 
