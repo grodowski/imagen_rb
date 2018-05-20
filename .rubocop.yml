@@ -12,3 +12,7 @@ Metrics/BlockLength:
   Enabled: true
   Exclude:
     - spec/**/*
+
+Style/SpaceInsideHashLiteralBraces:
+  Enabled: true
+  EnforcedStyle: no_space

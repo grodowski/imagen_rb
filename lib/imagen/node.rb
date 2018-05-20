@@ -151,5 +151,26 @@ module Imagen
         'instance method'
       end
     end
+
+    # Represents a Ruby block
+    class Block < Base
+      def build_from_ast(_ast_node)
+        super
+        tap { @name = ['block', args_list].compact.join(' ') }
+      end
+
+      def human_name
+        'block'
+      end
+
+      private
+
+      def args_list
+        arg_nodes = ast_node.children.find { |n| n.type == :args }.children
+        arg_names = arg_nodes.map { |arg| arg.children[0] }
+        return if arg_names.empty?
+        "(#{arg_names.join(', ')})"
+      end
+    end
   end
 end
