@@ -63,6 +63,12 @@ module Imagen
     class Root < Base
       attr_reader :dir
 
+      def build_from_file(path)
+        Imagen::Visitor.traverse(Parser::CurrentRuby.parse_file(path), self)
+      rescue Parser::SyntaxError => err
+        warn "#{path}: #{err} #{err.message}"
+      end
+
       def build_from_dir(dir)
         @dir = dir
         list_files.each do |path|
