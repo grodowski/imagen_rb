@@ -67,6 +67,7 @@ module Imagen
         Imagen::Visitor.traverse(Parser::CurrentRuby.parse_file(path), self)
       rescue Parser::SyntaxError => err
         warn "#{path}: #{err} #{err.message}"
+        self
       end
 
       def build_from_dir(dir)

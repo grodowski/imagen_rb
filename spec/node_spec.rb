@@ -72,8 +72,10 @@ describe Imagen::Node::Root do
     Tempfile.open do |f|
       f.write("do puts 'incomplete' end")
       f.flush
-      expect { described_class.new.build_from_file(f.path) }
+      ret = nil
+      expect { ret = described_class.new.build_from_file(f.path) }
         .to output(/unexpected token kDO/).to_stderr
+      expect(ret).to be_a(Imagen::Node::Root)
     end
   end
 end
