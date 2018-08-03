@@ -4,7 +4,7 @@ require 'spec_helper'
 require 'tempfile'
 
 describe Imagen::Node::Base do
-  let(:ast) { Parser::CurrentRuby.parse_file('spec/fixtures/class.rb') }
+  let(:ast) { Imagen::AST::Parser.parse_file('spec/fixtures/class.rb') }
 
   it 'stores filename, first_line and last_line' do
     node = described_class.new.build_from_ast(ast)
@@ -22,7 +22,7 @@ describe Imagen::Node::Base do
     STR
 
     node = described_class.new.build_from_ast(
-      Parser::CurrentRuby.parse(input)
+      Imagen::AST::Parser.parse(input)
     )
 
     # TODO: do we need the trailing newline?
@@ -53,7 +53,7 @@ describe Imagen::Node::Root do
 
   describe '#human_name' do
     let(:node) do
-      described_class.new.build_from_ast(Parser::CurrentRuby.parse(input))
+      described_class.new.build_from_ast(Imagen::AST::Parser.parse(input))
     end
 
     it 'has human name' do
@@ -78,6 +78,19 @@ describe Imagen::Node::Root do
       expect(ret).to be_a(Imagen::Node::Root)
     end
   end
+
+  it 'does not fail on invalid utf8 sequences' do
+    Tempfile.open do |f|
+      f.write('"\x87"')
+      f.flush
+
+      node = described_class.new.build_from_ast(
+        Imagen::AST::Parser.parse_file(f)
+      )
+
+      expect(node.ast_node.children.first).to eq("\x87")
+    end
+  end
 end
 
 describe Imagen::Node::Module do
@@ -92,7 +105,7 @@ describe Imagen::Node::Module do
   end
 
   let(:node) do
-    described_class.new.build_from_ast(Parser::CurrentRuby.parse(input))
+    described_class.new.build_from_ast(Imagen::AST::Parser.parse(input))
   end
 
   it 'has human name' do
@@ -112,7 +125,7 @@ describe Imagen::Node::Class do
   end
 
   let(:node) do
-    described_class.new.build_from_ast(Parser::CurrentRuby.parse(input))
+    described_class.new.build_from_ast(Imagen::AST::Parser.parse(input))
   end
 
   it 'has human name' do
@@ -132,7 +145,7 @@ describe Imagen::Node::CMethod do
   end
 
   let(:node) do
-    described_class.new.build_from_ast(Parser::CurrentRuby.parse(input))
+    described_class.new.build_from_ast(Imagen::AST::Parser.parse(input))
   end
 
   it 'has human name' do
@@ -152,7 +165,7 @@ describe Imagen::Node::IMethod do
   end
 
   let(:node) do
-    described_class.new.build_from_ast(Parser::CurrentRuby.parse(input))
+    described_class.new.build_from_ast(Imagen::AST::Parser.parse(input))
   end
 
   it 'has human name' do
@@ -170,7 +183,7 @@ describe Imagen::Node::Block do
   end
 
   let(:node) do
-    described_class.new.build_from_ast(Parser::CurrentRuby.parse(input))
+    described_class.new.build_from_ast(Imagen::AST::Parser.parse(input))
   end
 
   it 'has a human name' do

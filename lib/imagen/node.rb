@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require 'parser/current'
+require 'imagen/ast/parser'
+require 'imagen/ast/builder'
+
 module Imagen
   module Node
     # Abstract base class
@@ -64,7 +68,7 @@ module Imagen
       attr_reader :dir
 
       def build_from_file(path)
-        Imagen::Visitor.traverse(Parser::CurrentRuby.parse_file(path), self)
+        Imagen::Visitor.traverse(Imagen::AST::Parser.parse_file(path), self)
       rescue Parser::SyntaxError => err
         warn "#{path}: #{err} #{err.message}"
         self
@@ -74,7 +78,7 @@ module Imagen
         @dir = dir
         list_files.each do |path|
           begin
-            Imagen::Visitor.traverse(Parser::CurrentRuby.parse_file(path), self)
+            Imagen::Visitor.traverse(Imagen::AST::Parser.parse_file(path), self)
           rescue Parser::SyntaxError => err
             warn "#{path}: #{err} #{err.message}"
           end
