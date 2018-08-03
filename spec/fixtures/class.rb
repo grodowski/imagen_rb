@@ -6,7 +6,7 @@ class BaconClass
   end
 
   def foo
-    puts 'BaconClass#foo'
+    puts 'BaconClass#foo', '\x87'
   end
 
   class BaconChildClass
