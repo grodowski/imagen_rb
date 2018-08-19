@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'parser'
+require 'parser/builders/default'
+
 module Imagen
   module AST
     # An AST Builder for ruby parser.

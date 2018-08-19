@@ -32,5 +32,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'simplecov'
   spec.add_development_dependency 'simplecov-lcov'
+  spec.add_development_dependency 'simplecov-html'
 end
 # rubocop:enable all

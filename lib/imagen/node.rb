@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'parser/current'
 require 'imagen/ast/parser'
 require 'imagen/ast/builder'
 

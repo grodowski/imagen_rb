@@ -19,3 +19,6 @@ module Imagen
     RemoteBuilder.new(repo_url).build
   end
 end
+
+require 'imagen/ast/parser'
+require 'imagen/ast/builder'
