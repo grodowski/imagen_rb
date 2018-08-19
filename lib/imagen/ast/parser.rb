@@ -42,7 +42,11 @@ module Imagen
 
         require "parser/#{parser_version}"
 
-        required_const = parser_version == 'current' ? 'CurrentRuby' : parser_version.capitalize
+        required_const = if parser_version == 'current'
+                           'CurrentRuby'
+                         else
+                           parser_version.capitalize
+                         end
         @parser_klass = ::Parser.const_get(required_const)
       end
 
