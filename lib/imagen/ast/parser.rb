@@ -1,31 +1,26 @@
 # frozen_string_literal: true
 
-# TODO: we need to defer that require
-# default is 'parser/current'
-# but where to pass an option???????
-#
-
 module Imagen
-  @parser_version = 'current' # default to current runtime version
+  @parser_version = 'current' # default to runtime ruby syntax
 
   class << self
     attr_accessor :parser_version
   end
 
-  # AVAILABLE_RUBY_VERSIONS = %w[
-  #   ruby18
-  #   ruby19
-  #   ruby20
-  #   ruby21
-  #   ruby22
-  #   ruby23
-  #   ruby24
-  #   ruby25
-  #   ruby26
-  # ].freeze
+  AVAILABLE_RUBY_VERSIONS = %w[
+    ruby18
+    ruby19
+    ruby20
+    ruby21
+    ruby22
+    ruby23
+    ruby24
+    ruby25
+    ruby26
+    current
+  ].freeze
 
   module AST
-    # TODO: add specs for parser_klass??
     class Parser
       def self.parse_file(filename)
         new.parse_file(filename)
@@ -35,10 +30,9 @@ module Imagen
         new.parse(input, file)
       end
 
-      # @param parser_klass [Parser::Base] specific parser type
-      # when is that CurrentRuby evaluated?
+      # @param parser_version [String] ruby syntax version
       def initialize(parser_version = Imagen.parser_version)
-        # TODO: validate available versions!!!
+        validate_version(parser_version)
 
         require "parser/#{parser_version}"
 
@@ -66,6 +60,13 @@ module Imagen
           diagnostics.all_errors_are_fatal = true
           diagnostics.ignore_warnings = true
         end
+      end
+
+      private
+
+      def validate_version(parser_version)
+        return if AVAILABLE_RUBY_VERSIONS.include?(parser_version)
+        raise ArgumentError, "#{parser_version} is not supported by imagen"
       end
     end
   end
