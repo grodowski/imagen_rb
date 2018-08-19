@@ -18,6 +18,19 @@ describe Imagen::AST::Parser do
     )
   end
 
+  it 'uses ruby 1.9 syntax with global config' do
+    temp_parser_version = Imagen.parser_version
+    Imagen.parser_version = 'ruby19'
+
+    parser = described_class.new
+
+    expect { parser.parse(ruby20) }.to raise_error(
+      Parser::SyntaxError,
+      'unexpected token tLABEL'
+    )
+    Imagen.parser_version = temp_parser_version
+  end
+
   it 'fails on unknown syntax version string' do
     expect { described_class.new('jruby') }.to raise_error(
       ArgumentError,
