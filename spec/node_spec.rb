@@ -91,6 +91,19 @@ describe Imagen::Node::Root do
       expect(node.ast_node.children.first).to eq("\x87")
     end
   end
+
+  it 'reads files as UTF-8' do
+    tf = Tempfile.new('ascii_file', encoding: Encoding::BINARY)
+    tf.write("\x27\xE2\x8C\x9A\xEF\xB8\x8F\x27") # (clock emoji in quotes)
+    tf.close
+
+    node = described_class.new.build_from_ast(
+      Imagen::AST::Parser.parse_file(tf.path)
+    )
+    expect(node.ast_node.children.first).to eq('⌚️')
+
+    tf.unlink
+  end
 end
 
 describe Imagen::Node::Module do
