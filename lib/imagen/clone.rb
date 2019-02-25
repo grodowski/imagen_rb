@@ -23,7 +23,7 @@ module Imagen
     end
 
     def perform
-      cmd = "GIT_TERMINAL_PROMPT=0 git clone --depth 1 #{repo_url} #{dir}"
+      cmd = "GIT_TERMINAL_PROMPT=0 git clone #{repo_url} #{dir}"
       Open3.popen3(cmd) do |_s_in, _s_out, s_err, wait_thr|
         err_msg = s_err.read
         raise GitError, err_msg unless wait_thr.value.exitstatus.zero?
