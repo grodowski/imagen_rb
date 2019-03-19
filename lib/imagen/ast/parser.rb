@@ -66,6 +66,7 @@ module Imagen
 
       def validate_version(parser_version)
         return if AVAILABLE_RUBY_VERSIONS.include?(parser_version)
+
         raise ArgumentError, "#{parser_version} is not supported by imagen"
       end
     end

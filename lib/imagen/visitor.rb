@@ -20,6 +20,7 @@ module Imagen
 
     def traverse(ast_node, parent)
       return unless ast_node.is_a?(Parser::AST::Node)
+
       node = visit(ast_node, parent)
       ast_node.children.each { |child| traverse(child, node || parent) }
     end

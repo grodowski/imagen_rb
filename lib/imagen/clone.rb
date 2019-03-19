@@ -18,6 +18,7 @@ module Imagen
       unless repo_url.match?(/^https:\/\//)
         raise ArgumentError, 'repo_url must start with https://'
       end
+
       @repo_url = repo_url
       @dir = dirname
     end
