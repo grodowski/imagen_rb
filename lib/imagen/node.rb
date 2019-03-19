@@ -110,6 +110,7 @@ module Imagen
 
       def list_files
         return [dir] if File.file?(dir)
+
         Dir.glob("#{dir}/**/*.rb").reject { |path| path =~ Imagen::EXCLUDE_RE }
       end
     end
@@ -179,6 +180,7 @@ module Imagen
         arg_nodes = ast_node.children.find { |n| n.type == :args }.children
         arg_names = arg_nodes.map { |arg| arg.children[0] }
         return if arg_names.empty?
+
         "(#{arg_names.join(', ')})"
       end
     end

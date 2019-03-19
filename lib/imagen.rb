@@ -9,7 +9,7 @@ require 'imagen/remote_builder'
 
 # Base module
 module Imagen
-  EXCLUDE_RE = /_(spec|test).rb$/
+  EXCLUDE_RE = /_(spec|test).rb$/.freeze
 
   def self.from_local(dir)
     Node::Root.new.build_from_dir(dir)
