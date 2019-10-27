@@ -68,8 +68,8 @@ module Imagen
 
       def build_from_file(path)
         Imagen::Visitor.traverse(Imagen::AST::Parser.parse_file(path), self)
-      rescue Parser::SyntaxError => err
-        warn "#{path}: #{err} #{err.message}"
+      rescue Parser::SyntaxError => e
+        warn "#{path}: #{e} #{e.message}"
         self
       end
 
@@ -78,8 +78,8 @@ module Imagen
         list_files.each do |path|
           begin
             Imagen::Visitor.traverse(Imagen::AST::Parser.parse_file(path), self)
-          rescue Parser::SyntaxError => err
-            warn "#{path}: #{err} #{err.message}"
+          rescue Parser::SyntaxError => e
+            warn "#{path}: #{e} #{e.message}"
           end
         end
         self
