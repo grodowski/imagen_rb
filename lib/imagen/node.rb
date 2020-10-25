@@ -76,11 +76,9 @@ module Imagen
       def build_from_dir(dir)
         @dir = dir
         list_files.each do |path|
-          begin
-            Imagen::Visitor.traverse(Imagen::AST::Parser.parse_file(path), self)
-          rescue Parser::SyntaxError => e
-            warn "#{path}: #{e} #{e.message}"
-          end
+          Imagen::Visitor.traverse(Imagen::AST::Parser.parse_file(path), self)
+        rescue Parser::SyntaxError => e
+          warn "#{path}: #{e} #{e.message}"
         end
         self
       end

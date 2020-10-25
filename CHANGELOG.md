@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+- Min requirement for Ruby 2.5.0
+- Dependency updates
+
 ## [0.1.8]
 ### Changed
 - Dependency updates
