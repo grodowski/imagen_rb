@@ -26,7 +26,7 @@ describe Imagen::Node::Base do
     )
 
     # TODO: do we need the trailing newline?
-    expect(node.source + "\n").to eq <<-STR
+    expect("#{node.source}\n").to eq <<-STR
       if 2 + 2 == 5
         puts 'wow'
       end
