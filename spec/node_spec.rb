@@ -84,10 +84,9 @@ describe Imagen::Node::Root do
       f.write('"\x87"')
       f.flush
 
-      node = described_class.new.build_from_ast(
+      node = Imagen::Node::CMethod.new.build_from_ast(
         Imagen::AST::Parser.parse_file(f)
       )
-
       expect(node.ast_node.children.first).to eq("\x87")
     end
   end
@@ -97,9 +96,10 @@ describe Imagen::Node::Root do
     tf.write("\x27\xE2\x8C\x9A\xEF\xB8\x8F\x27") # (clock emoji in quotes)
     tf.close
 
-    node = described_class.new.build_from_ast(
+    node = Imagen::Node::CMethod.new.build_from_ast(
       Imagen::AST::Parser.parse_file(tf.path)
     )
+
     expect(node.ast_node.children.first).to eq('⌚️')
 
     tf.unlink
@@ -124,6 +124,40 @@ describe Imagen::Node::Module do
   it 'has human name' do
     expect(node.human_name).to eq('module')
   end
+
+  describe "#empty_def?" do
+    let(:module_node) do
+      root = Imagen::Node::Root.new.build_from_ast(Imagen::AST::Parser.parse(input))
+      root.children.first
+    end
+
+    context 'with an empty method def' do
+      let(:input) do
+        <<-STR
+          module Foo
+          end
+        STR
+      end
+
+      it 'returns true for empty class methods' do
+        expect(module_node).to be_empty_def
+      end
+    end
+
+    context 'with a non-empty method def' do
+      let(:input) do
+        <<-STR
+          module Foo
+            attr_reader :bar
+          end
+        STR
+      end
+
+      it 'returns false for non-empty class methods' do
+        expect(module_node).not_to be_empty_def
+      end
+    end
+  end
 end
 
 describe Imagen::Node::Class do
@@ -144,6 +178,40 @@ describe Imagen::Node::Class do
   it 'has human name' do
     expect(node.human_name).to eq('class')
   end
+
+  describe "#empty_def?" do
+    let(:class_node) do
+      root = Imagen::Node::Root.new.build_from_ast(Imagen::AST::Parser.parse(input))
+      root.children.first
+    end
+
+    context 'with an empty method def' do
+      let(:input) do
+        <<-STR
+          class Foo
+          end
+        STR
+      end
+
+      it 'returns true for empty class methods' do
+        expect(class_node).to be_empty_def
+      end
+    end
+
+    context 'with a non-empty method def' do
+      let(:input) do
+        <<-STR
+          class Foo
+            attr_reader :bar
+          end
+        STR
+      end
+
+      it 'returns false for non-empty class methods' do
+        expect(class_node).not_to be_empty_def
+      end
+    end
+  end
 end
 
 describe Imagen::Node::CMethod do
@@ -158,11 +226,49 @@ describe Imagen::Node::CMethod do
   end
 
   let(:node) do
-    described_class.new.build_from_ast(Imagen::AST::Parser.parse(input))
+    Imagen::Node::CMethod.new.build_from_ast(Imagen::AST::Parser.parse(input))
   end
 
   it 'has human name' do
     expect(node.human_name).to eq('class method')
+  end
+
+  describe "#empty_def?" do
+    let(:cmethod_node) do
+      root = Imagen::Node::Root.new.build_from_ast(Imagen::AST::Parser.parse(input))
+      root.children.first.children.first
+    end
+
+    context 'with an empty method def' do
+      let(:input) do
+        <<-STR
+          class Tom
+            def self.taylor
+            end
+          end
+        STR
+      end
+
+      it 'returns true for empty class methods' do
+        expect(cmethod_node).to be_empty_def
+      end
+    end
+
+    context 'with a non-empty method def' do
+      let(:input) do
+        <<-STR
+          class Tom
+            def self.taylor
+              1 + 1
+            end
+          end
+        STR
+      end
+
+      it 'returns false for non-empty class methods' do
+        expect(cmethod_node).not_to be_empty_def
+      end
+    end
   end
 end
 
@@ -184,6 +290,44 @@ describe Imagen::Node::IMethod do
   it 'has human name' do
     expect(node.human_name).to eq('instance method')
   end
+
+  describe "#empty_def?" do
+    let(:imethod_node) do
+      root = Imagen::Node::Root.new.build_from_ast(Imagen::AST::Parser.parse(input))
+      root.children.first.children.first
+    end
+
+    context 'with an empty method def' do
+      let(:input) do
+        <<-STR
+          class Tom
+            def taylor
+            end
+          end
+        STR
+      end
+
+      it 'returns true for empty class methods' do
+        expect(imethod_node).to be_empty_def
+      end
+    end
+
+    context 'with a non-empty method def' do
+      let(:input) do
+        <<-STR
+          class Tom
+            def taylor
+              1 + 1
+            end
+          end
+        STR
+      end
+
+      it 'returns false for non-empty class methods' do
+        expect(imethod_node).not_to be_empty_def
+      end
+    end
+  end
 end
 
 describe Imagen::Node::Block do
@@ -201,5 +345,39 @@ describe Imagen::Node::Block do
 
   it 'has a human name' do
     expect(node.human_name).to eq('block')
+  end
+
+  describe "#empty_def?" do
+    let(:block_node) do
+      root = Imagen::Node::Root.new.build_from_ast(Imagen::AST::Parser.parse(input))
+      root.children.first
+    end
+
+    context 'with an empty method def' do
+      let(:input) do
+        <<-STR
+          (0..1).each do
+          end
+        STR
+      end
+
+      it 'returns true for empty class methods' do
+        expect(block_node).to be_empty_def
+      end
+    end
+
+    context 'with a non-empty method def' do
+      let(:input) do
+        <<-STR
+          (0..1).each do
+            puts 'foo'
+          end
+        STR
+      end
+
+      it 'returns false for non-empty class methods' do
+        expect(block_node).not_to be_empty_def
+      end
+    end
   end
 end

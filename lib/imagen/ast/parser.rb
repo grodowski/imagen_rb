@@ -17,6 +17,10 @@ module Imagen
     ruby24
     ruby25
     ruby26
+    ruby30
+    ruby31
+    ruby32
+    ruby33
     current
   ].freeze
 

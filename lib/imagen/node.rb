@@ -23,6 +23,10 @@ module Imagen
         tap { @ast_node = ast_node }
       end
 
+      def empty_def?
+        ast_node.children.last.nil?
+      end
+
       def file_path
         ast_node.location.name.source_buffer.name
       end
@@ -80,6 +84,11 @@ module Imagen
         rescue Parser::SyntaxError => e
           warn "#{path}: #{e} #{e.message}"
         end
+        self
+      end
+
+      def build_from_ast(ast_node)
+        Imagen::Visitor.traverse(ast_node, self)
         self
       end
 
