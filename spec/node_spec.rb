@@ -125,7 +125,7 @@ describe Imagen::Node::Module do
     expect(node.human_name).to eq('module')
   end
 
-  describe "#empty_def?" do
+  describe '#empty_def?' do
     let(:module_node) do
       root = Imagen::Node::Root.new.build_from_ast(Imagen::AST::Parser.parse(input))
       root.children.first
@@ -179,7 +179,7 @@ describe Imagen::Node::Class do
     expect(node.human_name).to eq('class')
   end
 
-  describe "#empty_def?" do
+  describe '#empty_def?' do
     let(:class_node) do
       root = Imagen::Node::Root.new.build_from_ast(Imagen::AST::Parser.parse(input))
       root.children.first
@@ -233,7 +233,7 @@ describe Imagen::Node::CMethod do
     expect(node.human_name).to eq('class method')
   end
 
-  describe "#empty_def?" do
+  describe '#empty_def?' do
     let(:cmethod_node) do
       root = Imagen::Node::Root.new.build_from_ast(Imagen::AST::Parser.parse(input))
       root.children.first.children.first
@@ -291,7 +291,7 @@ describe Imagen::Node::IMethod do
     expect(node.human_name).to eq('instance method')
   end
 
-  describe "#empty_def?" do
+  describe '#empty_def?' do
     let(:imethod_node) do
       root = Imagen::Node::Root.new.build_from_ast(Imagen::AST::Parser.parse(input))
       root.children.first.children.first
@@ -347,7 +347,7 @@ describe Imagen::Node::Block do
     expect(node.human_name).to eq('block')
   end
 
-  describe "#empty_def?" do
+  describe '#empty_def?' do
     let(:block_node) do
       root = Imagen::Node::Root.new.build_from_ast(Imagen::AST::Parser.parse(input))
       root.children.first

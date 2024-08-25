@@ -118,7 +118,7 @@ module Imagen
       def list_files
         return [dir] if File.file?(dir)
 
-        Dir.glob("#{dir}/**/*.rb").reject { |path| path =~ Imagen::EXCLUDE_RE }
+        Dir.glob("#{dir}/**/*.rb").grep_v(Imagen::EXCLUDE_RE)
       end
     end
 
