@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.2.0]
+### Added
+- Add `Node#empty_def?` to return if the node is an empty definition
+
 ### Changed
 - Min requirement for Ruby 2.5.0
 - Dependency updates
@@ -39,7 +43,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - First release of `imagen` 🎉
 
-[Unreleased]: https://github.com/grodowski/imagen_rb/compare/v0.1.8...HEAD
+[Unreleased]: https://github.com/grodowski/imagen_rb/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/grodowski/imagen_rb/compare/v0.1.8...v0.2.0
 [0.1.8]: https://github.com/grodowski/imagen_rb/compare/v0.1.5...v0.1.8
 [0.1.5]: https://github.com/grodowski/imagen_rb/compare/v0.1.4...v0.1.5
 [0.1.4]: https://github.com/grodowski/imagen_rb/compare/v0.1.3...v0.1.4
