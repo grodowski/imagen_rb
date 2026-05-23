@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'imagen/ast/parser'
-require 'imagen/ast/builder'
 
 module Imagen
   module Node
