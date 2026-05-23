@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'prism'
+require 'imagen/ast/prism_builder'
+
 module Imagen
   @parser_version = 'current' # default to runtime ruby syntax
 
@@ -8,19 +11,9 @@ module Imagen
   end
 
   AVAILABLE_RUBY_VERSIONS = %w[
-    ruby18
-    ruby19
-    ruby20
-    ruby21
-    ruby22
-    ruby23
-    ruby24
-    ruby25
-    ruby26
-    ruby30
-    ruby31
-    ruby32
     ruby33
+    ruby34
+    ruby40
     current
   ].freeze
 
@@ -34,18 +27,17 @@ module Imagen
         new.parse(input, file)
       end
 
-      # @param parser_version [String] ruby syntax version
+      # @param parser_version [String] ruby syntax version (e.g. 'ruby33', 'ruby34', 'current')
       def initialize(parser_version = Imagen.parser_version)
         validate_version(parser_version)
 
-        require "parser/#{parser_version}"
-
-        required_const = if parser_version == 'current'
-                           'CurrentRuby'
-                         else
-                           parser_version.capitalize
-                         end
-        @parser_klass = ::Parser.const_get(required_const)
+        const_name = if parser_version == 'current'
+                       'ParserCurrent'
+                     else
+                       # e.g. "ruby34" -> "Parser34"
+                       "Parser#{parser_version.delete_prefix('ruby')}"
+                     end
+        @parser_klass = ::Prism::Translation.const_get(const_name)
       end
 
       def parse_file(filename)
@@ -59,7 +51,7 @@ module Imagen
       end
 
       def parser
-        @parser_klass.new(AST::Builder.new).tap do |parser|
+        @parser_klass.new(AST::PrismBuilder.new).tap do |parser|
           diagnostics = parser.diagnostics
           diagnostics.all_errors_are_fatal = true
           diagnostics.ignore_warnings = true

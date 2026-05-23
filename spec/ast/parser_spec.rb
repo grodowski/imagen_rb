@@ -1,33 +1,25 @@
 # frozen_string_literal: true
 
 describe Imagen::AST::Parser do
-  let(:ruby20) do
+  let(:ruby33_syntax) do
     <<-CODE
-      def works? keyword:
-        'nope'
-      end
+      [1, 2, 3] => [Integer => a, *]
+      a
     CODE
   end
 
-  it 'uses ruby 1.9 syntax given an option' do
-    parser = described_class.new('ruby19')
-
-    expect { parser.parse(ruby20) }.to raise_error(
-      Parser::SyntaxError,
-      'unexpected token tLABEL'
-    )
+  it 'parses ruby 3.3 syntax with ruby33 version' do
+    parser = described_class.new('ruby33')
+    expect { parser.parse(ruby33_syntax) }.not_to raise_error
   end
 
-  it 'uses ruby 1.9 syntax with global config' do
+  it 'parses ruby 3.3 syntax with global config' do
     temp_parser_version = Imagen.parser_version
-    Imagen.parser_version = 'ruby19'
+    Imagen.parser_version = 'ruby33'
 
     parser = described_class.new
 
-    expect { parser.parse(ruby20) }.to raise_error(
-      Parser::SyntaxError,
-      'unexpected token tLABEL'
-    )
+    expect { parser.parse(ruby33_syntax) }.not_to raise_error
     Imagen.parser_version = temp_parser_version
   end
 
@@ -38,8 +30,15 @@ describe Imagen::AST::Parser do
     )
   end
 
-  it 'uses a current ruby (> 2) by default' do
+  it 'fails on pre-3.3 version strings' do
+    expect { described_class.new('ruby19') }.to raise_error(
+      ArgumentError,
+      'ruby19 is not supported by imagen'
+    )
+  end
+
+  it 'uses the current ruby version by default' do
     parser = described_class.new
-    expect { parser.parse(ruby20) }.not_to raise_error
+    expect { parser.parse(ruby33_syntax) }.not_to raise_error
   end
 end

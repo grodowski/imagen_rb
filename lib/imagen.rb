@@ -21,4 +21,3 @@ module Imagen
 end
 
 require 'imagen/ast/parser'
-require 'imagen/ast/builder'

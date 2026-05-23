@@ -74,7 +74,7 @@ describe Imagen::Node::Root do
       f.flush
       ret = nil
       expect { ret = described_class.new.build_from_file(f.path) }
-        .to output(/unexpected token kDO/).to_stderr
+        .to output(/unexpected token (kDO|do)/).to_stderr
       expect(ret).to be_a(Imagen::Node::Root)
     end
   end
